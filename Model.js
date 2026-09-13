@@ -356,7 +356,6 @@ function isWebLink(url) {
 
 function nextEvent(events, now) {
   for (var i = 0; i < events.length; i++) {
-    if (events[i].allDay) continue
     if (events[i].endAt > now) return events[i]
   }
   return null

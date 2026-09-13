@@ -77,7 +77,14 @@ eq(M.readableOn('#3f51b5'), '#f2f4f4', 'light ink on a dark chip')
 const now = new Date(2026, 0, 5, 8, 30)
 eq(M.relative(new Date(2026, 0, 5, 9, 0), now), 'in 30m', 'relative minutes')
 eq(M.relative(new Date(2026, 0, 5, 11, 15), now), 'in 2h 45m', 'relative hours')
-eq(M.nextEvent(week, now).id, 'm', 'next event skips all-day banners')
+eq(M.nextEvent(week, now).id, 'trip', 'next event includes an active all-day event')
+
+const upcoming = M.decorateAll([
+  { id: 'past', start: '2026-01-04', end: '2026-01-05', allDay: true },
+  { id: 'tomorrow', start: '2026-01-06', end: '2026-01-07', allDay: true },
+  { id: 'later', start: '2026-01-06T09:00:00', end: '2026-01-06T10:00:00' },
+])
+eq(M.nextEvent(upcoming, now).id, 'tomorrow', 'next event selects an upcoming all-day event before a later timed event')
 
 // typed input is a trust boundary: junk must come back null, not a wrong date
 eq(M.parseDayInput('2026-02-31'), null, 'impossible date is rejected, not rolled over')
